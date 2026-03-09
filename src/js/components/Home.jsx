@@ -1,34 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 const Home = () => {
-  const [counter, setCounter] = useState(0);
+  let counter = 0;
+  const digits = [];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCounter(prev => prev + 1);
-    }, 1000);
+  const updateCounter = () => {
+    counter++;
+    let value = counter;
+    for (let i = digits.length - 1; i >= 0; i--) {
+      if (digits[i]) digits[i].textContent = value % 10;
+      value = Math.floor(value / 10);
+    }
+  };
 
-    return () => clearInterval(interval); 
-  }, []);
-
-  
-  const one = counter % 10;
-  const two = Math.floor(counter / 10) % 10;
-  const three = Math.floor(counter / 100) % 10;
-  const four = Math.floor(counter / 1000) % 10;
-  const five = Math.floor(counter / 10000) % 10;
-  const six = Math.floor(counter / 100000) % 10;
+  setTimeout(() => {
+    setInterval(updateCounter, 1000);
+  }, 0);
 
   return (
     <div className="container text-center mt-5">
       <h1>Simple Counter</h1>
       <div id="counter" className="d-flex justify-content-center fs-1 mt-4">
-        <div className="digit">{six}</div>
-        <div className="digit">{five}</div>
-        <div className="digit">{four}</div>
-        <div className="digit">{three}</div>
-        <div className="digit">{two}</div>
-        <div className="digit">{one}</div>
+        {[...Array(6)].map((_, index) => (
+          <div
+            className="digit"
+            key={index}
+            ref={(el) => (digits[index] = el)}
+          >
+            {0}
+          </div>
+        ))}
       </div>
     </div>
   );
